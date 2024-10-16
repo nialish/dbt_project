@@ -1,0 +1,12 @@
+# https://docs.getdbt.com/reference/warehouse-profiles/bigquery-profile
+# https://docs.getdbt.com/reference/warehouse-setups/sqlite-setup
+
+
+default:
+  outputs:
+    dev:
+      type: duckdb
+      path: './dbt.duckdb'
+      extensions:
+        - icu
+  target: dev

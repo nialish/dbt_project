@@ -1,0 +1,8 @@
+  
+services:
+  dbt:
+    container_name: dbt
+    build: .
+    image: dbt_image
+    volumes:
+      - ./:/usr/app/dbt_project
