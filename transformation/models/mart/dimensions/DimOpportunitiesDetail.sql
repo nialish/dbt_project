@@ -10,7 +10,7 @@ SELECT
 	 ,so.name AS Name
 	 ,so.stagename AS StageName
 	 ,so.stagesortorder AS StageOrder
-	 ,(SELECT Id FROM mart.DimDate dd WHERE strftime('%Y-%m-%d', dd.Date)  = strftime('%Y-%m-%d', so.closedate))  AS ClosedDateId
+	 ,{{ convert_date_to_id_from_dim_date('so.closedate') }} AS ClosedDateId
 	 ,so.type AS Type
 FROM 
 	StagingOpportunities so

@@ -16,7 +16,7 @@ SELECT
 	  ,sl.country AS Country
 	  ,sl.email AS Email
 	  ,sl.leadsource AS LeadSource
-	  ,(SELECT Id FROM mart.DimDate dd WHERE strftime('%Y-%m-%d', dd.Date)  = strftime('%Y-%m-%d', sl.createddate))  AS CreatedDateId
+	  ,{{ convert_date_to_id_from_dim_date('sl.createddate') }} AS CreatedDateId
 	  ,sl.createdbyid AS CreatedById
 FROM 
 	StagingLeads sl

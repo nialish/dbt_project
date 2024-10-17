@@ -14,7 +14,7 @@ SELECT
 	 ,sc.email AS Email 
 	 ,sc.title AS Title 
 	 ,sc.department AS Department
-	 ,(SELECT Id FROM mart.DimDate dd WHERE strftime('%Y-%m-%d', dd.Date)  = strftime('%Y-%m-%d', sc.lastmodifieddate))  AS LastModifiedDateId
+	 ,{{ convert_date_to_id_from_dim_date('sc.lastmodifieddate') }} AS LastModifiedDateId
 	 ,sc.lastmodifiedbyid 
 FROM 
 	StagingContacts sc

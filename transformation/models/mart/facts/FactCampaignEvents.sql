@@ -8,7 +8,7 @@ WITH DimCampaignEventStatuses AS (
 SELECT 
 	 ssc.campaign_id AS CampaignId
 	,dces.EventName 
-	,(SELECT Id FROM mart.DimDate dd WHERE strftime('%Y-%m-%d', dd.Date)  = strftime('%Y-%m-%d', ssc.lastmodifieddate)) AS LastModifiedDateId 
+    ,{{ convert_date_to_id_from_dim_date('ssc.lastmodifieddate') }} AS LastModifiedDateId
 	,ssc.expectedrevenue AS ExpectedRevenue
 	,ssc.actualcost AS ActualCost
 	,ssc.createdbyid AS CreatedById

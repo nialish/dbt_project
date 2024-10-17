@@ -10,7 +10,7 @@ SELECT
 	 ,sc.name AS Name 
 	 ,sc.type AS Type 
 	 ,sc.isactive AS IsActive
-	,(SELECT Id FROM mart.DimDate dd WHERE strftime('%Y-%m-%d', dd.Date)  = strftime('%Y-%m-%d', sc.startdate))  AS StateDateId
-	,(SELECT Id FROM mart.DimDate dd WHERE strftime('%Y-%m-%d', dd.Date) = strftime('%Y-%m-%d', sc.EndDate))  AS EndDateId
+	 ,{{ convert_date_to_id_from_dim_date('sc.startdate') }} AS StateDateId
+	 ,{{ convert_date_to_id_from_dim_date('sc.EndDate') }} AS EndDateId
 FROM 
 	StagingCampaigns sc

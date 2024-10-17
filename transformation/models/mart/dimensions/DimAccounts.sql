@@ -13,7 +13,7 @@ SELECT
 	  ,sa.industry AS Industry
 	  ,sa.annualrevenue AS AnnualRevenue
 	  ,sa.numberofemployees AS NumberOfEmployees
-	  ,(SELECT Id FROM mart.DimDate dd WHERE strftime('%Y-%m-%d', dd.Date)  = strftime('%Y-%m-%d', sa.createddate))  AS CreatedDateId
+	  ,{{ convert_date_to_id_from_dim_date('sa.createddate') }} AS CreatedDateId
 	  ,sa.createdbyid AS CreatedById
 FROM 
 	StagingAccounts sa

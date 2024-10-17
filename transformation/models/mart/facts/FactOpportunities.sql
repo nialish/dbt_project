@@ -12,8 +12,8 @@ SELECT
 	,op.pricebook2id AS PriceBookId
 	,op.campaignid AS CampaignId
 	,op.createdbyid AS CreatedById
-	,(SELECT Id FROM mart.DimDate dd WHERE strftime('%Y-%m-%d', dd.Date)  = strftime('%Y-%m-%d', op.lastmodifieddate))  AS LastModifiedDateId
-	,(SELECT Id FROM mart.DimDate dd WHERE strftime('%Y-%m-%d', dd.Date) = strftime('%Y-%m-%d', op.createddate))  AS CreatedDateId
+	,{{ convert_date_to_id_from_dim_date('op.lastmodifieddate') }} AS LastModifiedDateId
+	,{{ convert_date_to_id_from_dim_date('op.createddate') }} AS CreatedDateId
 	,op.contactid AS ContactId
 	,op.amount AS amount 
 	,op.probability AS Probability

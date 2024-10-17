@@ -8,7 +8,7 @@ WITH DimLeadEventStatuses AS (
 SELECT 
 	lead_id AS LeadId
 	,esd.EventName 
-	,(SELECT Id FROM mart.DimDate dd WHERE strftime('%Y-%m-%d', dd.Date)  = strftime('%Y-%m-%d', ssl.lastmodifieddate)) AS LastModifiedDateId 
+	,{{ convert_date_to_id_from_dim_date('ssl.lastmodifieddate') }} AS LastModifiedDateId
 	,ssl.annualrevenue 
 	,ssl.createdbyid 
 FROM 	

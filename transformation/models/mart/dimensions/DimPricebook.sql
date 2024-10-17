@@ -10,7 +10,7 @@ SELECT
         ,spb.product2id AS ProductId
         ,spb.unitprice AS UnitPrice 
         ,spb.isactive AS IsActive 
-        ,(SELECT Id FROM mart.DimDate dd WHERE strftime('%Y-%m-%d', dd.Date)  = strftime('%Y-%m-%d', spb.createddate))  AS CreatedDateId
+        ,{{ convert_date_to_id_from_dim_date('spb.createddate') }} AS CreatedDateId
         ,spb.createdbyid AS CreatedById
 FROM 
     StagingPricebook spb

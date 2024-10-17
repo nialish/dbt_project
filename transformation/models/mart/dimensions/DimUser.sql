@@ -13,6 +13,6 @@ SELECT
 	 ,su.companyname AS CompanyName
 	 ,su.email AS Email
 	 ,su.createdbyid 
-	 ,(SELECT Id FROM mart.DimDate dd WHERE strftime('%Y-%m-%d', dd.Date)  = strftime('%Y-%m-%d', su.createddate))  AS CreatedDateId
+	 ,{{ convert_date_to_id_from_dim_date('su.createddate') }} AS CreatedDateId
 FROM 
 	StagingUsers su
