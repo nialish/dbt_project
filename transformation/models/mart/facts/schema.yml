@@ -1,0 +1,94 @@
+version: 2
+
+models:
+   - name: FactCampaignEvents
+     description: "This model processes Salesforce campaign data along with event statuses, linking to the date dimension using the last modified date."
+     columns:
+      - name: CampaignId
+        description: "Unique identifier for each campaign, extracted from the Salesforce Campaign ID."
+        tests:
+            - not_null:
+                severity: error
+      - name: EventName
+        description: "The name of the event associated with the campaign status."
+      - name: LastModifiedDateId
+        description: "Foreign key linking the campaign's last modified date to the DimDate dimension. Matches based on the last modified date."
+      - name: ExpectedRevenue
+        description: "Projected revenue expected from the campaign."
+      - name: ActualCost
+        description: "Actual cost incurred for the campaign."
+      - name: CreatedById
+        description: "Identifier for the user who created the campaign record."
+     sources:
+      - name: staging
+        description: "Source data from the Salesforce staging tables."
+        tables:
+          - name: stg_salesforce__campaign
+            description: "The staging table for Salesforce Campaign data."
+      - name: DimCampaignEventStatuses
+        description: "Reference table containing event statuses associated with campaigns."
+
+   - name: FactLeadEvents
+     description: "This model processes Salesforce lead data along with event statuses, linking to the date dimension using the last modified date."
+     columns:
+      - name: LeadId
+        description: "Unique identifier for each lead, extracted from the Salesforce Lead ID."
+        tests:
+            - not_null:
+                severity: error
+      - name: EventName
+        description: "The name of the event associated with the lead status."
+      - name: LastModifiedDateId
+        description: "Foreign key linking the lead's last modified date to the DimDate dimension. Matches based on the last modified date."
+      - name: AnnualRevenue
+        description: "Projected annual revenue associated with the lead."
+      - name: CreatedById
+        description: "Identifier for the user who created the lead record."
+     sources:
+      - name: staging
+        description: "Source data from the Salesforce staging tables."
+        tables:
+          - name: stg_salesforce__lead
+            description: "The staging table for Salesforce Lead data."
+      - name: DimLeadEventStatuses
+        description: "Reference table containing event statuses associated with leads."
+
+
+   - name: FactOpportunities
+     description: "This model processes Salesforce opportunity data, generating fact data for opportunities and linking to the date dimension using the last modified and created dates."
+     columns:
+      - name: OpportunityId
+        description: "Unique identifier for each opportunity, extracted from the Salesforce Opportunity ID."
+        tests:
+            - unique:
+                severity: error
+            - not_null:
+                severity: error
+      - name: LeadId
+        description: "Identifier for the lead associated with the opportunity. Defaulted to 'Unknown' for records without a linked lead."
+      - name: AccountId
+        description: "Identifier for the account associated with the opportunity."
+      - name: PriceBookId
+        description: "Identifier for the price book associated with the opportunity."
+      - name: CampaignId
+        description: "Identifier for the campaign associated with the opportunity."
+      - name: CreatedById
+        description: "Identifier for the user who created the opportunity record."
+      - name: LastModifiedDateId
+        description: "Foreign key linking the opportunity's last modified date to the DimDate dimension. Matches based on the last modified date."
+      - name: CreatedDateId
+        description: "Foreign key linking the opportunity's created date to the DimDate dimension. Matches based on the created date."
+      - name: ContactId
+        description: "Identifier for the contact associated with the opportunity."
+      - name: Amount
+        description: "Monetary value of the opportunity."
+      - name: Probability
+        description: "Probability of closing the opportunity, expressed as a percentage."
+      - name: IsWon
+        description: "Boolean value indicating whether the opportunity has been won (TRUE) or lost (FALSE)."
+     sources:
+      - name: staging
+        description: "Source data from the Salesforce staging tables."
+        tables:
+          - name: stg_salesforce__opportunity
+            description: "The staging table for Salesforce Opportunity data."

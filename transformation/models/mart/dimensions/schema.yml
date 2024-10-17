@@ -1,0 +1,271 @@
+version: 2
+
+models:
+  - name: DimAccounts  
+    description: "This model processes Salesforce account data, generating fact data for the accounts and linking to the date dimension using the created date."
+    columns:
+      - name: Id
+        description: "Unique identifier for each account, extracted from the Salesforce Account ID."
+        tests:
+            - unique:
+                severity: error
+            - not_null:
+                severity: error
+      - name: Name
+        description: "Name of the Salesforce account."
+      - name: TYPE
+        description: "Type or classification of the account, e.g., Customer, Partner, Prospect."
+      - name: PhoneNumber
+        description: "Phone number associated with the account."
+      - name: Industry
+        description: "Industry category associated with the account."
+      - name: AnnualRevenue
+        description: "The annual revenue of the account."
+      - name: NumberOfEmployees
+        description: "The total number of employees associated with the account."
+      - name: CreatedDateId
+        description: "Foreign key linking the account's created date to the DimDate dimension. Matches based on the created date."
+      - name: CreatedById
+        description: "Identifier for the user who created the account."
+    sources:
+      - name: staging
+        description: "Source data from the Salesforce staging tables."
+        tables:
+          - name: stg_salesforce__account
+            description: "The staging table for Salesforce Account data."
+
+  - name: DimCampaignEventStatuses  
+    description: "This model generates a simple dataset representing the status of events and campaigns, where each combination of EventName and CampaignStatus is represented."
+    columns:
+      - name: EventName
+        description: "The name of the event, either 'Planned' or 'Completed'."
+      - name: CampaignStatus
+        description: "The status of the campaign, either 'Planned' or 'Completed'."
+
+  - name: DimCampaignsDetail
+    description: "This model processes Salesforce campaigns, generating fact data for the campaigns and linking to the date dimension using start and end dates."
+    columns:
+      - name: CampaignId
+        description: "Unique identifier for each campaign, extracted from the Salesforce Campaign ID."
+        tests:
+            - unique:
+                severity: error
+            - not_null:
+                severity: error
+      - name: Name
+        description: "Name of the Salesforce campaign."
+      - name: Type
+        description: "Type or classification of the campaign, e.g., Email, Event, Social Media."
+      - name: IsActive
+        description: "Boolean value indicating whether the campaign is active (TRUE) or not (FALSE)."
+      - name: StateDateId
+        description: "Foreign key linking the campaign's start date to the DimDate dimension. Matches based on the start date."
+      - name: EndDateId
+        description: "Foreign key linking the campaign's end date to the DimDate dimension. Matches based on the end date."
+    sources:
+      - name: staging
+        description: "Source data from the Salesforce staging tables."
+        tables:
+          - name: stg_salesforce__campaign
+            description: "The staging table for Salesforce Campaigns data."
+  
+  - name: DimContacts  
+    description: "This model processes Salesforce contact data, generating fact data for contacts and linking to the date dimension using the last modified date."
+    columns:
+      - name: ContactId
+        description: "Unique identifier for each contact, extracted from the Salesforce Contact ID."
+        tests:
+            - unique:
+                severity: error
+            - not_null:
+                severity: error
+      - name: salutation
+        description: "Salutation for the contact (e.g., Mr., Mrs., Dr.)."
+      - name: FirstName
+        description: "First name of the contact."
+      - name: LastName
+        description: "Last name of the contact."
+      - name: PhoneNumber
+        description: "Phone number associated with the contact."
+      - name: Email
+        description: "Email address of the contact."
+      - name: Title
+        description: "Job title of the contact."
+      - name: Department
+        description: "Department in which the contact works."
+      - name: LastModifiedDateId
+        description: "Foreign key linking the contact's last modified date to the DimDate dimension. Matches based on the last modified date."
+      - name: lastmodifiedbyid
+        description: "Identifier for the user who last modified the contact."
+    sources:
+      - name: staging
+        description: "Source data from the Salesforce staging tables."
+        tables:
+          - name: stg_salesforce__contact
+            description: "The staging table for Salesforce Contact data."
+
+  - name: DimDate  
+    description: "This model generates a series of dates from January 1, 2020, to December 31, 2030, including calculated fields for week, month, year, and quarter."
+    columns:
+      - name: Id
+        description: "Unique identifier for each date entry, generated as a row number."
+        tests:
+            - unique:
+                severity: error
+            - not_null:
+                severity: error
+      - name: Date
+        description: "The actual date value in the series."
+        tests:
+            - not_null:
+                severity: error
+      - name: Week
+        description: "The week number of the year for the corresponding date (week starts on Sunday)."
+      - name: Month
+        description: "The month number of the year for the corresponding date."
+      - name: Year
+        description: "The year for the corresponding date."
+      - name: Quarter
+        description: "The quarter of the year based on the month (1-4)."
+        tests:
+            - not_null:
+                severity: error
+
+  - name: DimLeadEventsStatuses  
+    description: "This model generates a dataset representing lead events and their corresponding statuses, reflecting the lifecycle of leads."
+    columns:
+      - name: EventName
+        description: "The name of the event, indicating the current stage of the lead in the lifecycle (e.g., LeadCreated, InProgress, LeadWon, LeadLost)."
+        tests:
+          - not_null:
+              severity: error
+      - name: LeadStatus
+        description: "The status of the lead at the given event, indicating whether it is open, working, closed converted, or closed not converted."
+        tests:
+          - not_null:
+              severity: error
+
+  - name: DimLeadsDetail  
+    description: "This model processes Salesforce lead data, generating fact data for leads and linking to the date dimension using the created date."
+    columns:
+      - name: Id
+        description: "Unique identifier for each lead, extracted from the Salesforce Lead ID."
+        tests:
+            - unique:
+                severity: error
+            - not_null:
+                severity: error
+      - name: Salutation
+        description: "Salutation for the lead (e.g., Mr., Mrs., Dr.)."
+      - name: FirstName
+        description: "First name of the lead."
+      - name: LastName
+        description: "Last name of the lead."
+      - name: Title
+        description: "Job title of the lead."
+      - name: Company
+        description: "Company name associated with the lead."
+      - name: State
+        description: "State where the lead is located."
+      - name: Country
+        description: "Country where the lead is located."
+      - name: Email
+        description: "Email address of the lead."
+      - name: LeadSource
+        description: "The source from which the lead was generated (e.g., Web, Referral, etc.)."
+      - name: CreatedDateId
+        description: "Foreign key linking the lead's created date to the DimDate dimension. Matches based on the created date."
+      - name: CreatedById
+        description: "Identifier for the user who created the lead."
+    sources:
+      - name: staging
+        description: "Source data from the Salesforce staging tables."
+        tables:
+          - name: stg_salesforce__lead
+            description: "The staging table for Salesforce Lead data."
+
+
+  - name: DimOpportunitiesDetail
+    description: "This model processes Salesforce opportunity data, generating fact data for opportunities and linking to the date dimension using the close date."
+    columns:
+      - name: Id
+        description: "Unique identifier for each opportunity, extracted from the Salesforce Opportunity ID."
+        tests:
+            - unique:
+                severity: error
+            - not_null:
+                severity: error
+      - name: Name
+        description: "The name of the opportunity."
+      - name: StageName
+        description: "Current stage of the opportunity in the sales process."
+      - name: StageOrder
+        description: "Sort order of the opportunity stage for reporting purposes."
+      - name: ClosedDateId
+        description: "Foreign key linking the opportunity's close date to the DimDate dimension. Matches based on the close date."
+      - name: Type
+        description: "Type of opportunity (e.g., New Business, Existing Business)."
+    sources:
+      - name: staging
+        description: "Source data from the Salesforce staging tables."
+        tables:
+          - name: stg_salesforce__opportunity
+            description: "The staging table for Salesforce Opportunity data."
+
+  - name: DimPricebook 
+    description: "This model processes Salesforce pricebook entry data, generating fact data for pricebook entries and linking to the date dimension using the created date."
+    columns:
+      - name: Id
+        description: "Unique identifier for each pricebook entry, extracted from the Salesforce Pricebook Entry ID."
+        tests:
+            - unique:
+                severity: error
+            - not_null:
+                severity: error
+      - name: ProductId
+        description: "Identifier for the product associated with the pricebook entry."
+      - name: UnitPrice
+        description: "The price of the product in the pricebook."
+      - name: IsActive
+        description: "Boolean value indicating whether the pricebook entry is active (TRUE) or not (FALSE)."
+      - name: CreatedDateId
+        description: "Foreign key linking the pricebook entry's created date to the DimDate dimension. Matches based on the created date."
+      - name: CreatedById
+        description: "Identifier for the user who created the pricebook entry."
+    sources:
+      - name: staging
+        description: "Source data from the Salesforce staging tables."
+        tables:
+          - name: stg_salesforce__pricebook_entry
+            description: "The staging table for Salesforce Pricebook Entry data."
+
+  - name: DimUser
+    description: "This model processes Salesforce user data, generating fact data for users and linking to the date dimension using the created date."
+    columns:
+      - name: Id
+        description: "Unique identifier for each user, extracted from the Salesforce User ID."
+        tests:
+            - unique:
+                severity: error
+            - not_null:
+                severity: error
+      - name: UserName
+        description: "Username of the Salesforce user."
+      - name: FirstName
+        description: "First name of the user."
+      - name: LastName
+        description: "Last name of the user."
+      - name: CompanyName
+        description: "Name of the company associated with the user."
+      - name: Email
+        description: "Email address of the user."
+      - name: CreatedById
+        description: "Identifier for the user who created this user record."
+      - name: CreatedDateId
+        description: "Foreign key linking the user's created date to the DimDate dimension. Matches based on the created date."
+    sources:
+      - name: staging
+        description: "Source data from the Salesforce staging tables."
+        tables:
+          - name: stg_salesforce__user
+            description: "The staging table for Salesforce User data."
