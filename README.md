@@ -32,4 +32,5 @@ The goal of this project is to setup a docker environment for docker with dbt an
    The **DimLeadEventsStatuses** and **DimCampaignEventStatuses** are also the helper dimensions which doesn't get new values but they help to calcualte the lifecycle events of lead and campaingn. See the models implementation for more details 
 
 ## Facts and Dimensions ER Diagram:
-https://github.com/nialish/dbt_project/blob/main/transformation/SalesforceDimensionalModel.png
+![Diagram]([images/diagram.png)](https://github.com/nialish/dbt_project/blob/main/transformation/SalesforceDimensionalModel.png
+) 
