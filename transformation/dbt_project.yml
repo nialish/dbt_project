@@ -20,18 +20,13 @@ clean-targets:
 models:
   elastic_dbt_interview:
     +database: dbt
-    intermediate:
-      +materialized: table
-      +schema: intermediate
-    marts:
-      +schema: marts
-      +materialized: table
-    reporting:
-      +schema: reporting
-      +materialized: table
     staging:
       +schema: staging
       +materialized: view
+    mart:
+      +schema: mart
+      +materialized: table
+
 
 vars:
   "dbt_date:time_zone": "Europe/Berlin"
